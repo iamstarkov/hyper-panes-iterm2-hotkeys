@@ -14,23 +14,10 @@ plugins: [
 
 ## Usage
 
-Pre-configured hotkeys are:
+Configured hotkeys are:
 
-* prevPane: `CmdOrCtrl+Alt+Left`
-* nextPane: `CmdOrCtrl+Alt+Right`
-
-You can change it to something else, with `hotkeys` object in your config:
-
-```js
-hotkeys: {
-  prevPane: "Cmd+Left",
-  nextPane: "Cmd+Right"
-}
-```
-
-You can find [available hotkeys to use][eldocs] from Electron docs
-
-[eldocs]: https://github.com/electron/electron/blob/master/docs/api/accelerator.md
+* Previous Pane: `CmdOrCtrl+Alt+Left`
+* Next Pane: `CmdOrCtrl+Alt+Right`
 
 ## License
 
