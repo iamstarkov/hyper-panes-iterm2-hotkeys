@@ -1,25 +1,33 @@
 {
-  "name": "hyper-keys",
+  "name": "hyper-panes-iterm2-hotkeys",
   "version": "0.0.0",
-  "description": "hyper keys manager",
+  "description": "Hyper panes navigation with iTerm2 hotkeys",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iamstarkov/hyper-keys.git"
+    "url": "git+https://github.com/iamstarkov/hyper-panes-iterm2-hotkeys.git"
   },
   "keywords": [
     "hyperterm-plugin",
     "hyper-plugin",
     "hyperterm",
-    "hyper"
+    "hyper",
+    "iterm2",
+    "hotkey",
+    "hotkeys",
+    "shortcut",
+    "shortcuts"
   ],
   "author": "Vladimir Starkov <iamstarkov@gmail.com> (https://iamstarkov.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/iamstarkov/hyper-keys/issues"
+    "url": "https://github.com/iamstarkov/hyper-panes-iterm2-hotkeys/issues"
   },
-  "homepage": "https://github.com/iamstarkov/hyper-keys#readme"
+  "homepage": "https://github.com/iamstarkov/hyper-panes-iterm2-hotkeys#readme",
+  "dependencies": {
+    "hyperterm-register-shortcut": "^1.0.1"
+  }
 }
