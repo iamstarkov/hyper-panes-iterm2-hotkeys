@@ -5,23 +5,49 @@ const nextTabKey = "Ctrl+Tab";
 const prevPaneKey = "CmdOrCtrl+Alt+Left";
 const nextPaneKey = "CmdOrCtrl+Alt+Right";
 
+const keys = obj => Object.keys(obj);
+const prop = prop => obj => obj[prop];
 const merge = (one, two) => Object.assign({}, one, two);
+const stringify = a => JSON.stringify(a);
+const log = console.log.bind(console);
+
 const mousetrapify = key => key.replace('CmdOrCtrl', 'mod').toLowerCase();
 
+
 let focusedWindow;
-const registerWindow = win => {
-  win.on('focus', () => { focusedWindow = win; });
+function onWindow(win) {
+  console.log('HYPER-KEYMAP :: ONWINDOW');
+  win.on('focus', () => {
+    console.log('WINDOWS ON FOCUS', stringify(keys(win)));
+    focusedWindow = win;
+  });
   win.on('blur', () => {
+    console.log('WINDOWS ON BLUR', stringify(keys(win)));
     if (focusedWindow === win) {
       focusedWindow = undefined;
     }
   });
 }
 
-const selectPane = type => {
-  if (focusedWindow) {
-    focusedWindow.rpc.emit(`${type} pane req`);
+let openedApp;
+function onApp(app) {
+  console.log('ONAPP', stringify(keys(app)));
+  openedApp = app;
+}
+
+const perform = event => {
+  log('log event', { event });
+  log('global objs', { focusedWindow, openedApp })
+  console.log((focusedWindow) ? 'focusedWindow' : 'createWindow');
+
+  /*
+  if (event === 'termgroup add req') {
+    focusedWindow ? focusedWindow.rpc.emit(event) : createWindow();
   }
+  if (focusedWindow) {
+    focusedWindow.rpc.emit(event);
+  }
+  */
 }
 
 const decorateMenu = menu => menu.map(menuItem => {
@@ -45,6 +71,8 @@ const decorateMenu = menu => menu.map(menuItem => {
 const decorateTerms = (Terms, { React, notify, Notification }) => {
   return class extends React.Component {
     constructor(props, context) {
+      console.log('decorateTerms keymap', props.keymap);
+      console.log('decorateTerms focusedWindow', focusedWindow);
       super(props, context);
       this.handleFocusActive = this.handleFocusActive.bind(this);
       this.onTermsRef = this.onTermsRef.bind(this);
@@ -62,15 +90,16 @@ const decorateTerms = (Terms, { React, notify, Notification }) => {
       }
       const document = term.getTermDocument();
       const keys = new Mousetrap(document);
+      const keymap = {
+        'CmdOrCtrl+B': 'termgroup add req',
+      };
 
-      keys.bind(
-        mousetrapify(prevPaneKey),
-        () => selectPane('prev')
-      );
-      keys.bind(
-        mousetrapify(nextPaneKey),
-        () => selectPane('next')
-      );
+      Object.keys(keymap).map(accelerator => {
+        const event = keymap[accelerator];
+        const key = mousetrapify(accelerator);
+        log('map keymap', { key, event });
+        keys.bind(key, () => perform(event));
+      })
 
       this.keys = keys;
     }
@@ -99,8 +128,16 @@ const decorateTerms = (Terms, { React, notify, Notification }) => {
   }
 }
 
+
+const decorateConfig = config => {
+  console.log('decorateConfig', config);
+  return config;
+}
+
 module.exports = {
-  onWindow: registerWindow,
-  decorateTerms: decorateTerms,
-  decorateMenu: decorateMenu,
+  onWindow,
+  onApp,
+  decorateTerms,
+  // decorateMenu: decorateMenu,
+  // decorateConfig,
 }
