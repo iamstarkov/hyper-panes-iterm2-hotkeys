@@ -13,36 +13,18 @@ const log = console.log.bind(console);
 
 const mousetrapify = key => key.replace('CmdOrCtrl', 'mod').toLowerCase();
 
-
-let focusedWindow;
-function onWindow(win) {
-  console.log('HYPER-KEYMAP :: ONWINDOW');
-  win.on('focus', () => {
-    console.log('WINDOWS ON FOCUS', stringify(keys(win)));
-    focusedWindow = win;
-  });
-  win.on('blur', () => {
-    console.log('WINDOWS ON BLUR', stringify(keys(win)));
-    if (focusedWindow === win) {
-      focusedWindow = undefined;
-    }
-  });
+let win;
+function onRendererWindow(window) {
+  console.log('onRendererWindow', window);
+  win = window;
 }
 
-let openedApp;
-function onApp(app) {
-  console.log('ONAPP', stringify(keys(app)));
-  openedApp = app;
-}
+const perform = ({ key, event }) => {
+  log({ key, event });
 
-const perform = event => {
-  log('log event', { event });
-  log('global objs', { focusedWindow, openedApp })
-  console.log((focusedWindow) ? 'focusedWindow' : 'createWindow');
-
-  /*
+  win.rpc.emit(event);
+    /*
   if (event === 'termgroup add req') {
-    focusedWindow ? focusedWindow.rpc.emit(event) : createWindow();
   }
   if (focusedWindow) {
     focusedWindow.rpc.emit(event);
@@ -50,6 +32,7 @@ const perform = event => {
   */
 }
 
+/*
 const decorateMenu = menu => menu.map(menuItem => {
   if (menuItem.role !== 'window') {
     return menuItem;
@@ -67,12 +50,13 @@ const decorateMenu = menu => menu.map(menuItem => {
   });
   return newMenuItem;
 });
+*/
 
 const decorateTerms = (Terms, { React, notify, Notification }) => {
   return class extends React.Component {
     constructor(props, context) {
       console.log('decorateTerms keymap', props.keymap);
-      console.log('decorateTerms focusedWindow', focusedWindow);
+      // console.log('decorateTerms focusedWindow', focusedWindow);
       super(props, context);
       this.handleFocusActive = this.handleFocusActive.bind(this);
       this.onTermsRef = this.onTermsRef.bind(this);
@@ -90,15 +74,18 @@ const decorateTerms = (Terms, { React, notify, Notification }) => {
       }
       const document = term.getTermDocument();
       const keys = new Mousetrap(document);
-      const keymap = {
-        'CmdOrCtrl+B': 'termgroup add req',
-      };
 
+      const keymap = this.props.keymap;
+
+      console.log({keymap});
       Object.keys(keymap).map(accelerator => {
         const event = keymap[accelerator];
         const key = mousetrapify(accelerator);
         log('map keymap', { key, event });
-        keys.bind(key, () => perform(event));
+        keys.bind(key, () => {
+          // debugger;
+          perform({ key, event })
+        });
       })
 
       this.keys = keys;
@@ -135,8 +122,7 @@ const decorateConfig = config => {
 }
 
 module.exports = {
-  onWindow,
-  onApp,
+  onRendererWindow,
   decorateTerms,
   // decorateMenu: decorateMenu,
   // decorateConfig,
