@@ -3,6 +3,7 @@ const defaultKeymap = require('./keymap');
 
 let userKeymap;
 const decorateConfig = config => {
+  console.log('sup config', config);
   userKeymap = config.keymap || {};
   return config;
 }
