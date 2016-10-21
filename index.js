@@ -63,7 +63,6 @@ const decorateMenu = menus => {
   ));
 }
 
-
 module.exports = {
   decorateConfig,
   decorateMenu,

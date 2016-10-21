@@ -1,13 +1,13 @@
+const isMac = process.platform === 'darwin';
+
 module.exports = {
   'CmdOrCtrl+,':       'show-settings',
 
   'CmdOrCtrl+N':       'new-window',
   'CmdOrCtrl+T':       'new-tab',
 
-  // accelerator: isMac ? 'Cmd+D' : 'Ctrl+Shift+E',
-  'CmdOrCtrl+D':       'split-vertical',
-  // accelerator: isMac ? 'Cmd+Shift+D' : 'Ctrl+Shift+O',
-  'CmdOrCtrl+Shift+D': 'split-horizontal',
+  [isMac ? 'CmdOrCtrl+D': 'Ctrl+Shift+E']:        'split-vertical',
+  [isMac ? 'CmdOrCtrl+Shift+D' : 'Ctrl+Shift+O']: 'split-horizontal',
 
   'CmdOrCtrl+W':       'close',
   'CmdOrCtrl+shift+W': 'close-window',
@@ -18,8 +18,7 @@ module.exports = {
   'CmdOrCtrl+R':       'reload',
   'CmdOrCtrl+Shift+R': 'reload-full',
 
-  // accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-  'Alt+Command+I':     'toggle-devtools',
+  [isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I']: 'toggle-devtools',
 
   'CmdOrCtrl+0':       'zoom-reset',
   'CmdOrCtrl+plus':    'zoom-in',
