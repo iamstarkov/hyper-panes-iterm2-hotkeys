@@ -28,6 +28,6 @@
   },
   "homepage": "https://github.com/iamstarkov/hyper-panes-iterm2-hotkeys#readme",
   "dependencies": {
-    "mousetrap": "^1.6.0"
+    "ramda": "^0.22.1"
   }
 }
