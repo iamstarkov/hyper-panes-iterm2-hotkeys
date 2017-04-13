@@ -1,5 +1,7 @@
 # hyper-panes-iterm2-hotkeys
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/iamstarkov/hyper-panes-iterm2-hotkeys.svg)](https://greenkeeper.io/)
+
 > Hyper panes navigation with iTerm2 hotkeys
 
 ## Install
